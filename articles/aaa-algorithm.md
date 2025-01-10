@@ -1,17 +1,25 @@
 ---
-title: "AAAアルゴリズムによる"
+title: "AAAアルゴリズムによる有理関数近似"
 emoji: 🍙
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["アルゴリズム"]
+topics: ["アルゴリズム","julia"]
 published: false
 ---
 
 ## 概要
 
-AAAアルゴリズムは、与えられた精度あるいは与えられた近似次数に対して有理近似を求めるために用いられるアルゴリズムである。ここではアルゴリズムの主な特徴について簡単に概説し、数値的な詳細は原論文[^1][^2]を参照していただきたい。
-とある用途を想定しているため、本記事では関数$F(\omega)$を有理関数
+AAAアルゴリズムは、与えられた精度あるいは与えられた近似次数に対して有理関数近似を求めるために用いられるアルゴリズムである。
+ある関数F(x)を近似することを考える。
 
-で近似することを考える。このような近似を行えると、例えばフーリエ変換等の積分が以下のように解析的に行えるため嬉しい。
+$$
+\tilde{C}(t)
+= \frac{1}{2\pi} \int_{-\infty}^{\infty} \mathrm{d}\omega\, F(\omega)\,\mathrm{e}^{-i \omega t}
+= -i \sum_{k=1}^{M} \eta_k\, \mathrm{e}^{-i t z_k^{\prime}}
+= \sum_{k=1}^{M} c_k\, \mathrm{e}^{-a_k t}
+$$
+
+を得る。ここで、\(z_k^{\prime}\) は複素平面の下半分における \(F(\omega)\) の極、\(c_k \equiv -i \eta_k\)、\(a_k \equiv i z_k^{\prime}\) である。
+本稿ではアルゴリズムの主な特徴について概説する。詳細は原論文[^1][^2]を参照のこと。
 
 
 ## アルゴリズムの導入
@@ -155,31 +163,22 @@ $$
 
 によって計算される。
 
-## 最終的な近似式
-
-最後に基本定理を用いることで、\(M \sim \frac{M'}{2}\) 項をもつ最終的な式
-
-$$
-\tilde{C}(t)
-= \frac{1}{2\pi} \int_{-\infty}^{\infty} \mathrm{d}\omega\, F(\omega)\,\mathrm{e}^{-i \omega t}
-= -i \sum_{k=1}^{M} \eta_k\, \mathrm{e}^{-i t z_k^{\prime}}
-= \sum_{k=1}^{M} c_k\, \mathrm{e}^{-a_k t}
-$$
-（式6）
-
-を得る。ここで、\(z_k^{\prime}\) は複素平面の下半分における \(F(\omega)\) の極、\(c_k \equiv -i \eta_k\)、\(a_k \equiv i z_k^{\prime}\) である。
 
 ## コード
 
 MATLAB版は
-
+https://github.com/chebfun/chebfun
 Python版は
+https://github.com/c-f-h/baryrat
+Julia版は
+https://github.com/complexvariables/RationalFunctionApproximation.jl
+でそれぞれ実装されている。
 
-で実装されている。Python版をJuliaに移植したので、そのコードを以下に示す。
+以下RationalFunctionApproximation.jlを使ってみる。
 
 ---
 
-[^1]: Nakatsukasa, Yuji, et al. *SIAM Journal on Scientific Computing* (2018).  
-[^2]: Nakatsukasa, Yuji, et al. *SIAM Review* (2020).
+[^1]: Y. Nakatsukasa, O. Sete, and L. N. Trefethen, SIAM J. Sci. Comp. 40, A1494-A1522 (2018).
+[^2]: Y. Nakatsukasa and L. N. Trefethen, SIAM J. Sci. Comp. 42, A3157-A3179 (2020).
 
 
