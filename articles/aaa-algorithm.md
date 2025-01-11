@@ -216,7 +216,6 @@ ax = Axis(fig[1, 1],
     ylabel = "f(x)",
     title  = "Rational Approximation"
 )
-
 lines!(ax, xplot, y_original, label = "Original function", color = :blue)
 lines!(ax, xplot, y_approx1, label = "AAA approximation (barycentric)", color = :orange, linestyle = :dash)
 lines!(ax, xplot, y_approx2, label = "AAA approximation", color = :green, linestyle = :dot)
@@ -235,7 +234,6 @@ ax = Axis(fig[1, 1],
     ylabel = "Error",
     title  = "Error of Rational Approximation"
 )
-
 lines!(ax, xplot, err1, label = "Error (barycentric)", color = :orange)
 lines!(ax, xplot, err2, label = "Error", color = :green)
 ax2 = Axis(
