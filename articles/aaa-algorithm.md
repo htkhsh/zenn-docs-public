@@ -1,6 +1,6 @@
 ---
 title: "AAAアルゴリズムによる有理関数近似"
-emoji: 🍙
+emoji: 🍡
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["アルゴリズム","julia"]
 published: true
