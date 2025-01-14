@@ -170,6 +170,8 @@ https://github.com/c-f-h/baryrat
 Julia版は
 https://github.com/complexvariables/RationalFunctionApproximation.jl
 でそれぞれ実装されている。
+[追記] SciPyでも実装されてました。
+https://scipy.github.io/devdocs/reference/generated/scipy.interpolate.AAA.html
 
 ここでは、RationalFunctionApproximation.jlを使ってみる。例として、関数
 
