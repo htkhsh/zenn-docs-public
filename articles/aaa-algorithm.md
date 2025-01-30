@@ -168,9 +168,10 @@ https://github.com/chebfun/chebfun
 Python版は
 https://github.com/c-f-h/baryrat
 Julia版は
+https://github.com/macd/BaryRational.jl
 https://github.com/complexvariables/RationalFunctionApproximation.jl
 でそれぞれ実装されている。
-[追記] SciPyでも実装されてました。
+[追記] SciPyでも実装されていました。
 https://scipy.github.io/devdocs/reference/generated/scipy.interpolate.AAA.html
 
 ここでは、RationalFunctionApproximation.jlを使ってみる。例として、関数
