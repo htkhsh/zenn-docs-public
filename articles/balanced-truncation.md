@@ -177,9 +177,9 @@ save("result.png", fig)
 
 ---
 
-[^1] H. Ikeno, Comput. Phys. Commun. 230, 135–144 (2018).
-[^2] B. Moore, IEEE Trans. Autom. Control 26, 17–32 (1981).
-[^3] T. Haut and G. Beylkin, SIAM J. Matrix Anal. Appl. 33, 1101–1125 (2012). 
+[^1]: B. Moore, IEEE Trans. Autom. Control 26, 17–32 (1981).
+[^2]: H. Ikeno, Comput. Phys. Commun. 230, 135–144 (2018).
+[^3]: T. Haut and G. Beylkin, SIAM J. Matrix Anal. Appl. 33, 1101–1125 (2012). 
 
 
 
