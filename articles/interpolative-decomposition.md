@@ -1,5 +1,5 @@
 ---
-title: "補間分解（interpolative decomposition）と積分への応用"
+title: "補間分解（Interpolative Decomposition）と積分への応用"
 emoji: "🍡"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["アルゴリズム","julia"]
@@ -8,14 +8,12 @@ published: false
 
 ## 概要
 
-本稿では、補間分解（interpolative decomposition）。ちなみに補間分解が訳語として定着しているのか分からなかった。
+本稿では、補間分解（Interpolative Decomposition, ID）について解説を行う。
 
 
 ## 補間分解
 
-
-
-ネット上の日本語の記事だと。
+ネット上の日本語の記事だとこちらで詳しく解説されている。
 https://qiita.com/shachah-svaahaa/items/6a6530b273a9d5846d69
 
 
@@ -27,9 +25,11 @@ Fortranで
 実装されている。
 SciPy版
 https://github.com/hydeik/mxpfit
-もあり、内部で上記のFortranコードを呼んでいるようである。
+もあるが、内部では上記のFortranコードを呼んでいるようである。
 
 ## ガウス求積法
+
+例えば、できるだけ少ない次数の離散和で分解したいとする
 
 実関数 $f(t,\omega): \mathbb{R}\times\mathbb{R}\rightarrow \mathbb{R}$ について $\omega$ に関する定積分、より詳細には
 
