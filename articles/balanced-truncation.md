@@ -8,12 +8,12 @@ published: false
 
 ## 概要
 
-本稿では、システム制御理論におけるモデル縮約（Model Reduction）を複素指数関数和に適用し、Balanced Truncation法によって複素指数関数和の次数削減手法を紹介する。まずアルゴリズムを概観し、実装例を示す。
+本稿では、システム制御理論におけるモデル縮約（Model Reduction）[^1]を複素指数関数和に適用し、Balanced Truncation法[^2]によって複素指数関数和の次数削減手法を紹介する。まずアルゴリズムを概観し、実装例を示す。
 
 
 ## アルゴリズムの導入
 
-以下のアルゴリズムは、論文[1^]を参照した。
+以下のアルゴリズムは、論文[^2]を参照した。
 
 すでに複素指数関数和
 
@@ -64,7 +64,7 @@ $$
 = \bar{\mathbf{U}} \,\boldsymbol{\Sigma}\, \mathbf{U}^{T}
 $$
 
-をもつ。ここで、$\mathbf{U} \in \mathbb{C}^{M\times M}$ はユニタリ行列、$\bar{\mathbf{U}}$はその複素共役、$\boldsymbol{\Sigma} = \mathrm{diag}(\sigma_1,\dots,\sigma_M)$ は $\sigma_1 \ge \sigma_2 \ge \cdots \ge \sigma_M > 0$ をみたす対角行列となる。 これは decompositionと呼ばれる。アルゴリズムは論文[3^]で詳しく紹介されている。
+をもつ。ここで、$\mathbf{U} \in \mathbb{C}^{M\times M}$ はユニタリ行列、$\bar{\mathbf{U}}$はその複素共役、$\boldsymbol{\Sigma} = \mathrm{diag}(\sigma_1,\dots,\sigma_M)$ は $\sigma_1 \ge \sigma_2 \ge \cdots \ge \sigma_M > 0$ をみたす対角行列となる。 これは decompositionと呼ばれる。アルゴリズムは論文[^3]で詳しく紹介されている。
 
 整数 $M'$ が 
 
@@ -177,9 +177,9 @@ save("result.png", fig)
 
 ---
 
-[1^] H. Ikeno, Comput. Phys. Commun. 230, 135–144 (2018).
-[2^] B. Moore, IEEE Trans. Autom. Control 26, 17–32 (1981).
-[3^] T. Haut and G. Beylkin, SIAM J. Matrix Anal. Appl. 33, 1101–1125 (2012). 
+[^1] H. Ikeno, Comput. Phys. Commun. 230, 135–144 (2018).
+[^2] B. Moore, IEEE Trans. Autom. Control 26, 17–32 (1981).
+[^3] T. Haut and G. Beylkin, SIAM J. Matrix Anal. Appl. 33, 1101–1125 (2012). 
 
 
 
