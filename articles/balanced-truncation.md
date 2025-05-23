@@ -8,20 +8,20 @@ published: false
 
 ## 概要
 
-本稿では、システム制御理論におけるモデル縮約（Model Reduction）[^1]を複素指数関数和に適用し、Balanced Truncation法[^2]によって複素指数関数和の次数削減手法を紹介する。まずアルゴリズムを概観し、実装例を示す。
+本稿では、システム制御理論におけるモデル縮約（Model Reduction）[^1]を複素指数関数和に適用し、Balanced Truncation法[^2]によって複素指数関数和の次数を削減する手法を紹介する。まずアルゴリズムを概観し、実装例を示す。
 
 
 ## アルゴリズムの導入
 
 以下のアルゴリズムは、論文[^2]を参照した。
 
-すでに複素指数関数和
+まず、複素指数関数和
 
 $$
 f(t) = \sum_{k=1}^M c_k \mathrm{e}^{-a_k t}, \quad c_k,a_k\in\mathbb{C},\; \operatorname{Re}(a_k)>0.
 $$
 
-が与えられているとする。Balanced truncation法の目的は、与えられた精度 $\epsilon$ に対して、より少ない項数を持つ別の最適な指数和を用いて $f(t)$ を近似することであり、すなわち
+がすでに与えられているとする。本手法の目的は、ある精度 $\epsilon$ に対して、より少ない項数を持つ別の指数和を用いて $f(t)$ を近似することであり、すなわち
 
 $$
 g(t)=\sum_{k=1}^{M'} c_k' \mathrm{e}^{-a_k' t}, 
@@ -40,7 +40,7 @@ f(s)
 = \sum_{k=1}^{M} \frac{c_k}{s+a_k}
 $$
 
-となる。すると問題は、高次の有理関数を低次の有理関数で近似する最適化問題に変形され、その形は
+となる。すると問題は、高次の有理関数を低次の有理関数で近似する最適化問題に帰着し、
 
 $$
 g(s)
@@ -49,7 +49,7 @@ g(s)
 \left\|f(s)-g(s)\right\| < \epsilon'
 $$
 
-となる。これはすべての $s > 0$ について成立する。BTM の利点は、近似誤差に対して $L^\infty$ の上界を与える点にある。
+と定式化できる。これはすべての $s > 0$ について成立する。Balanced Truncation法の利点は、近似誤差に対して $L^\infty$ ノルムの上界を与える点にある。
 
 次に$c_k,a_k$ を用いて、可制御性グラミアン $\mathbf{W}_\mathrm{c} \in \mathbb{C}^{M\times M}$ を構成する。これは
 
@@ -64,7 +64,7 @@ $$
 = \bar{\mathbf{U}} \,\boldsymbol{\Sigma}\, \mathbf{U}^{T}
 $$
 
-をもつ。ここで、$\mathbf{U} \in \mathbb{C}^{M\times M}$ はユニタリ行列、$\bar{\mathbf{U}}$はその複素共役、$\boldsymbol{\Sigma} = \mathrm{diag}(\sigma_1,\dots,\sigma_M)$ は $\sigma_1 \ge \sigma_2 \ge \cdots \ge \sigma_M > 0$ をみたす対角行列となる。 これは decompositionと呼ばれる。アルゴリズムは論文[^3]で詳しく紹介されている。
+をもつ。ここで、$\mathbf{U} \in \mathbb{C}^{M\times M}$ はユニタリ行列、$\bar{\mathbf{U}}$はその複素共役、$\boldsymbol{\Sigma} = \mathrm{diag}(\sigma_1,\dots,\sigma_M)$ は $\sigma_1 \ge \sigma_2 \ge \cdots \ge \sigma_M > 0$ をみたす対角行列となる。 アルゴリズム等の詳細は論文[^3]を参照をされたい。
 
 整数 $M'$ が 
 
@@ -72,19 +72,13 @@ $$
 2\sum_{i=M'+1}^{M} \sigma_i \leq \epsilon
 $$
 
-をみたすとき、$\mathbf{A}' \in \mathbb{C}^{M'\times M'}$ を
+をみたすとき、次式によって縮約モデルを構成する。
 
 $$
-\mathbf{A}' = \mathbf{U}_{M'}^{*}\,\mathbf{A}\,\bar{\mathbf{U}}_{M'}
+\mathbf{A}' = \mathbf{U}_{M'}^{*}\,\mathbf{A}\,\bar{\mathbf{U}}_{M'} \in \mathbb{C}^{M'\times M'}, \quad \mathbf{b}' = \mathbf{U}_{M'}\,\mathbf{b} \in \mathbb{C}^{M'},
 $$
 
-および、$\mathbf{b}' \in \mathbb{C}^{M'}$ を
-
-$$
-\mathbf{b}' = \mathbf{U}_{M'}\,\mathbf{b}
-$$
-
-によって構成する。ここで、$\mathbf{A} = \operatorname{diag}(a_1, a_2, \ldots, a_M)$、$\mathbf{b} = (\sqrt{c_1}, \sqrt{c_2}, \ldots, \sqrt{c_M})^T$、 $\mathbf{U}_{M'} = \mathbf{U}(1\!:\!M,\,1\!:\!M')$ である。
+ここで、$\mathbf{A} = \operatorname{diag}(a_1, a_2, \ldots, a_M)$、$\mathbf{b} = (\sqrt{c_1}, \sqrt{c_2}, \ldots, \sqrt{c_M})^T$、 $\mathbf{U}_{M'} = \mathbf{U}(1\!:\!M,\,1\!:\!M')$ である。
 
 最後に、$\mathbf{A}'$ の固有値分解
 
@@ -115,7 +109,7 @@ https://github.com/hydeik/mxpfit
 https://github.com/DOC-Package/ExpFit.jl
 Julia版も実装されている。
 
-ここではExpFit.jlを使ってみる。例として、乱数で生成した複素パラメータ$\{(c_k,a_k)\}$をもつ関数を近似することを考える。精度は $\epsilon = 1.0\times 10^{-3}$ とした。以下コードを示す。
+ここではExpFit.jlを使ってみる。例として、乱数で生成した$M=200$個の複素パラメータ$\{(c_k,a_k)\}$をもつ関数を近似することを考える。精度は $\epsilon = 1.0\times 10^{-3}$ とした。以下コードを示す。
 
 ```julia
 using LinearAlgebra
@@ -171,6 +165,7 @@ lines!(ax1, t, imag.(fv), color = :black, linestyle = :dash, linewidth = 2.5)
 axislegend(ax1, position = :rb, labelsize = 25)
 save("result.png", fig)
 ```
+
 与えた精度に対して、項数は $M'=14$ となった。以下に結果を図示した。
 ![alt text](/images/btm.png)
 誤差が許容範囲内に収まっており、よく近似できていることが確認できる。
