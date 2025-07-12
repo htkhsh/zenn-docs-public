@@ -13,21 +13,24 @@ published: false
 
 ## 補間分解
 
-ネット上の日本語の記事だとこちらで詳しく解説されている。
+日本語の記事だとこちらで詳しく解説されている。
 https://qiita.com/shachah-svaahaa/items/6a6530b273a9d5846d69
-
 
 
 ### ソースコード
 
-Fortranで
-
+Fortran実装が
+https://tygert.com/software.html
 実装されている。
-SciPy版
-https://github.com/hydeik/mxpfit
-もあるが、内部では上記のFortranコードを呼んでいるようである。
+SciPy
+https://docs.scipy.org/doc/scipy/reference/linalg.interpolative.html
+もある。
+Julia
+https://github.com/JuliaLinearAlgebra/LowRankApprox.jl
+となる。
 
-## ガウス求積法
+
+## 積分への応用
 
 例えば、できるだけ少ない次数の離散和で分解したいとする
 

@@ -8,8 +8,7 @@ published: false
 
 ## 概要
 
-本稿では、システム制御理論におけるモデル縮約（Model Reduction）[^1]を複素指数関数和に適用し、Balanced Truncation法[^2]によって複素指数関数和の次数を削減する手法を紹介する。まずアルゴリズムを概観し、実装例を示す。
-
+本稿では、システム制御理論におけるモデル縮約（Model Reduction）[^1]の手法であるBalanced Truncation法[^2]を複素指数関数和に適用し、関数の項数を削減する手法を紹介する。まずアルゴリズムを概観し、続いて実装例を示す。
 
 ## アルゴリズムの導入
 
@@ -49,7 +48,7 @@ g(s)
 \left\|f(s)-g(s)\right\| < \epsilon'
 $$
 
-と定式化できる。これはすべての $s > 0$ について成立する。Balanced Truncation法の利点は、近似誤差に対して $L^\infty$ ノルムの上界を与える点にある。
+と定式化できる。これはすべての $s > 0$ について成立する。本手法の利点は、近似誤差に対して $L^\infty$ ノルムの上界を与える点にある。
 
 次に$c_k,a_k$ を用いて、可制御性グラミアン $\mathbf{W}_\mathrm{c} \in \mathbb{C}^{M\times M}$ を構成する。これは
 
@@ -66,13 +65,13 @@ $$
 
 をもつ。ここで、$\mathbf{U} \in \mathbb{C}^{M\times M}$ はユニタリ行列、$\bar{\mathbf{U}}$はその複素共役、$\boldsymbol{\Sigma} = \mathrm{diag}(\sigma_1,\dots,\sigma_M)$ は $\sigma_1 \ge \sigma_2 \ge \cdots \ge \sigma_M > 0$ をみたす対角行列となる。 アルゴリズム等の詳細は論文[^3]を参照をされたい。
 
-整数 $M'$ が 
+整数 $M'$ を 
 
 $$
 2\sum_{i=M'+1}^{M} \sigma_i \leq \epsilon
 $$
 
-をみたすとき、次式によって縮約モデルを構成する。
+をみたすように選び、次式によって縮約モデルを構成する。
 
 $$
 \mathbf{A}' = \mathbf{U}_{M'}^{*}\,\mathbf{A}\,\bar{\mathbf{U}}_{M'} \in \mathbb{C}^{M'\times M'}, \quad \mathbf{b}' = \mathbf{U}_{M'}\,\mathbf{b} \in \mathbb{C}^{M'},
@@ -86,17 +85,17 @@ $$
 \mathbf{A}' = \mathbf{X} \,\boldsymbol{\Lambda}\,\mathbf{X}^{-1}
 $$
 
-を計算すると、
+を計算すると、縮約されたパラメータ
 
 $$
 a_{i}'=\boldsymbol{\Lambda}_{ii}, 
 \quad
-c_i'=(\mathbf{b}_i^{''})^{2} 
+c_i'=((\mathbf{X}^{-1}\mathbf{b}')_i)^{2} 
 \quad
 (i=1, \ldots, M')
 $$
 
-が得られる。ここで、$\mathbf{b}^{''} = \mathbf{X}^{-1}\mathbf{b}'$ である。
+が得られる。
 
 
 ## ソースコード
@@ -107,7 +106,7 @@ https://github.com/hydeik/mxpfit
 
 また筆者によって
 https://github.com/DOC-Package/ExpFit.jl
-Julia版も実装されている。
+Juliaでも実装されている。
 
 ここではExpFit.jlを使ってみる。例として、乱数で生成した$M=200$個の複素パラメータ$\{(c_k,a_k)\}$をもつ関数を近似することを考える。精度は $\epsilon = 1.0\times 10^{-3}$ とした。以下コードを示す。
 
@@ -115,7 +114,6 @@ Julia版も実装されている。
 using LinearAlgebra
 using ExpFit
 using Random
-using CairoMakie
 using LaTeXStrings 
 
 function generate_exponent_coefficient_pairs(n::Int)
@@ -151,22 +149,9 @@ print("Approximation order = ", length(er.coeff), "\n")
 fv = f.(t)
 erv = er.(t)
 err = abs.(erv .- fv)
-
-# プロット
-fig = Figure(size = (640, 560))
-ax1 = Axis(fig[1, 1], ylabel = L"f(t)", ylabelsize = 25)
-ax2 = Axis(fig[2, 1], xlabel = L"t", ylabel = L"\delta f(t)", xlabelsize = 25, ylabelsize = 25)
-for (F, col, lbl) in zip((real, imag), (:orangered, :royalblue), (L"\mathrm{Re} f(t)", L"\mathrm{Im} f(t)"))
-    lines!(ax1, t, F.(erv), label = lbl, color = col, linewidth = 2.5)
-    lines!(ax2, t, F.(erv .- fv),      color = col, linewidth = 2.5)
-end
-lines!(ax1, t, real.(fv), label = L"Reference", color = :black, linestyle = :dash, linewidth = 2.5)
-lines!(ax1, t, imag.(fv), color = :black, linestyle = :dash, linewidth = 2.5)
-axislegend(ax1, position = :rb, labelsize = 25)
-save("result.png", fig)
 ```
 
-与えた精度に対して、項数は $M'=14$ となった。以下に結果を図示した。
+与えた精度に対して、次数は $M'=14$ となった。以下に結果を図示した。
 ![alt text](/images/btm.png)
 誤差が許容範囲内に収まっており、よく近似できていることが確認できる。
 
