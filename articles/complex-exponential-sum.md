@@ -14,7 +14,7 @@ published: false
 
 ### 問題設定
 
-与えられた関数 $f:\mathbb{R}\to\mathbb{C},\;t \to f(t)$ に対して $f_j=f\left(t_j\right)$ としたとき、ベクトル $\mathbf{f}=\left(f_0, f_1, \ldots, f_{N^{\prime}}\right)^T$ を考える。各要素 $f_j$ は等間隔格子 $t_j=h j,\left(h=\frac{t_c}{2N-1}, \quad j=0,1, \ldots, N^{\prime}\right)$ 上でサンプリングされており、$t_c$ はカットオフ時間、 $2N-1$ はサンプルサイズである。
+与えられた関数 $f:\mathbb{R}\to\mathbb{C},\;t \to f(t)$ に対して $f_j=f\left(t_j\right)$ としたとき、ベクトル $\mathbf{f}=\left(f_0, f_1, \ldots, f_{2N-1}\right)^T$ を考える。各要素 $f_j$ は等間隔格子 $t_j=h j,\left(h=\frac{t_c}{2N-1}, \quad j=0,1, \ldots, N^{\prime}\right)$ 上でサンプリングされており、$t_c$ はカットオフ時間、 $2N-1$ はサンプルサイズである。
 
 ここで $f_j$ が以下のように表現できると仮定する。
 
@@ -22,7 +22,7 @@ $$
 f_j=\sum_{k=1}^M c_k e^{-a_k h j}=\sum_{k=1}^M c_k z_k^j,\quad c_k \in \mathbb{C},\; z_k=e^{-a_k h} \in \mathbb{D}
 $$
 
-ここで記号 $\mathbb{D}$ は零点を除いた複素単位円板を表す。したがって、問題は与えられた精度 $\varepsilon$ に対して、
+ここで記号 $\mathbb{D}$ は零点を除いた複素単位円板を表す。したがって、問題は与えられた精度 $\varepsilon$ に対して、不等式
 
 $$
 \left\|f_j-\sum_{k=1}^M c_k z_k^j\right\|<\varepsilon
@@ -32,7 +32,7 @@ $$
 
 ### 指数の評価：Hankel行列とその特異値分解
 
-ESPRIT法は、以下のHankel行列
+ESPRIT法は、Hankel行列
 
 $$
 \mathbf{H}_{2 N-L, L+1}=\left(\begin{array}{cccc}
@@ -49,7 +49,7 @@ $$
 \mathbf{H}_{2 N-L, L+1}=\mathbf{U}_{2 N-L} \Sigma_{2 N-L, L+1} \mathbf{W}_{L+1},
 $$
 
-を用いる。先に挙げた他手法もHankel行列のランク削減に基づいている。ここで、$\Sigma_{2 N-L, L+1}$ は対角成分が $\sigma_1 \geq \sigma_2 \cdots \geq \sigma_{L+1} \geq 0$ である矩形対角行列である。指数近似における項数 $M$ は $\sigma_M / \sigma_0<\varepsilon$ という条件を満たすように選ぶ。
+を用いる。先に挙げた他手法もHankel行列のランク削減に基づいている。ここで、$\Sigma_{2 N-L, L+1}$ は対角成分が $\sigma_1 \geq \sigma_2 \cdots \geq \sigma_{L+1} \geq 0$ である矩形対角行列である。項数 $M$ は $\sigma_M / \sigma_0<\varepsilon$ という条件を満たすように選ぶ。
 
 すると、ノード $z_k$ は行列 $\mathbf{A}_M$ 
 
@@ -63,7 +63,7 @@ $$
 \mathbf{W}_{M, L}(s)=\mathbf{W}(1: M, 1+s: L+s) \quad(s=0,1)
 $$
 
-である。$\left(\mathbf{W}_M(0)^{\mathrm{T}}\right)^{+}$ は $\mathbf{W}_M(0)^{\mathrm{T}}$ のMoore-Penrose逆行列を表す。 最後に、指数 $a_k$ はノード $z_k$から以下のように復元できる。
+である。$\left(\mathbf{W}_M(0)^{\mathrm{T}}\right)^{+}$ は $\mathbf{W}_M(0)^{\mathrm{T}}$ のMoore-Penrose逆行列を表す。 最後に、指数 $a_k$ はノード $z_k$ から以下のように復元できる。
 
 $$
 a_k=-\frac{\log \left(z_k\right)}{h} \quad(k=1, \ldots, M)
@@ -95,9 +95,9 @@ $$
 
 ## ソースコード
 
-筆者によって
+筆者によって実装されたJuliaコードを
 https://github.com/DOC-Package/ExpFit.jl
-Juliaで実装されている。その他Prony法、Matrix Pencil法等も実装済みである。[^6]
+で見つけることができる。その他Prony法、Matrix Pencil法等も実装済みである。[^6]
 
 ExpFit.jlを使ってみる。例としてベッセル関数の和を考える。カットオフ時間は $t_c=50$ とし、精度は $\epsilon = 1.0\times 10^{-3}$ とした。以下コードを示す。
 
