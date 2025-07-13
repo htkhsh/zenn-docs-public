@@ -1,5 +1,5 @@
 ---
-title: "補間分解（Interpolative Decomposition）と積分への応用"
+title: "補間分解（Interpolative Decomposition）と求積法への応用"
 emoji: "🍡"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["アルゴリズム","julia"]
