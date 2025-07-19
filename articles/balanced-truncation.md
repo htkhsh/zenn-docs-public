@@ -1,6 +1,6 @@
 ---
 title: "Balanced Truncation法による複素指数関数和のモデル縮約"
-emoji: "🍡"
+emoji: "🍙"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["アルゴリズム","julia"]
 published: false
@@ -8,7 +8,8 @@ published: false
 
 ## 概要
 
-前回のESPRIT法に関する記事では、一方で本稿では、すでに得られている指数関数和に対して、システム制御理論におけるモデル縮約（Model Reduction）[^1]の手法であるBalanced Truncation法[^2]を適用し、関数の項数を削減する手法を紹介する。まずアルゴリズムを概観し、続いて実装例を示す。
+前回の[ESPRIT法に関する記事](https://zenn.dev/htkhsh/articles/complex-exponential-sum)では、関数あるいは等間隔時系列データを複素指数関数和で近似する方法について解説した。
+一方で本稿では、すでに得られている指数関数和に対して、システム制御理論におけるモデル縮約（Model Order Reduction）手法であるBalanced Truncation法[^1][^2]を適用し、関数の項数を削減する手法を紹介する。まずアルゴリズムを概観し、続いて実装例を示す。
 
 ## アルゴリズムの導入
 
@@ -20,12 +21,12 @@ $$
 f(t) = \sum_{k=1}^M c_k \mathrm{e}^{-a_k t}, \quad c_k,a_k\in\mathbb{C},\; \operatorname{Re}(a_k)>0.
 $$
 
-がすでに与えられているとする。本手法の目的は、ある精度 $\epsilon$ に対して、より少ない項数を持つ別の指数和を用いて $f(t)$ を近似することであり、すなわち
+がすでに与えられているとする。本手法の目的は、ある精度 $\delta$ に対して、より少ない項数 $M'\leq M$ を持つ別の指数和を用いて $f(t)$ を近似することであり、すなわち
 
 $$
 g(t)=\sum_{k=1}^{M'} c_k' \mathrm{e}^{-a_k' t}, 
 \quad
-\left\|f(t)-g(t)\right\| < \epsilon 
+\left\|f(t)-g(t)\right\| < \delta 
 $$
 
 が成り立つような $g(t)$ を考える。
@@ -45,10 +46,10 @@ $$
 g(s)
 = \mathcal{L}\bigl[g(t)\bigr] = \sum_{k=1}^{M'} \frac{c_k'}{s+a_k'}, 
 \quad
-\left\|f(s)-g(s)\right\| < \epsilon'
+\left\|f(s)-g(s)\right\| < \epsilon
 $$
 
-と定式化できる。これはすべての $s > 0$ について成立する。本手法の利点は、近似誤差に対して $L^\infty$ ノルムの上界を与える点にある。
+と定式化できる。これはすべての $s > 0$ について成立する。
 
 次に$c_k,a_k$ を用いて、可制御性グラミアン $\mathbf{W}_\mathrm{c} \in \mathbb{C}^{M\times M}$ を構成する。これは
 
@@ -65,7 +66,7 @@ $$
 
 をもつ。ここで、$\mathbf{U} \in \mathbb{C}^{M\times M}$ はユニタリ行列、$\bar{\mathbf{U}}$はその複素共役、$\boldsymbol{\Sigma} = \mathrm{diag}(\sigma_1,\dots,\sigma_M)$ は $\sigma_1 \ge \sigma_2 \ge \cdots \ge \sigma_M > 0$ をみたす対角行列となる。 アルゴリズム等の詳細は論文[^3]を参照をされたい。
 
-整数 $M'$ を 
+整数 $M'$ を与えられた精度 $\epsilon$ に対して
 
 $$
 2\sum_{i=M'+1}^{M} \sigma_i \leq \epsilon
@@ -108,7 +109,7 @@ https://github.com/hydeik/mxpfit
 https://github.com/DOC-Package/ExpFit.jl
 Juliaでも実装されている。
 
-ここではExpFit.jlを使ってみる。例として、乱数で生成した$M=200$個の複素パラメータ$\{(c_k,a_k)\}$をもつ関数を近似することを考える。精度は $\epsilon = 1.0\times 10^{-3}$ とした。以下コードを示す。
+ここではExpFit.jlを使ってみる。例として、乱数で生成した $M=200$ 個の複素パラメータ $\{(c_k,a_k)\}$ をもつ関数を近似することを考える。精度は $\epsilon = 1.0\times 10^{-3}$ とした。以下コードを示す。
 
 ```julia
 using LinearAlgebra
@@ -152,8 +153,10 @@ err = abs.(erv .- fv)
 ```
 
 与えた精度に対して、次数は $M'=14$ となった。以下に結果を図示した。
+
 ![alt text](/images/btm.png)
-誤差が許容範囲内に収まっており、よく近似できていることが確認できる。
+
+誤差が与えた精度内に収まっており、よく近似できていることが確認できる。
 
 ---
 
